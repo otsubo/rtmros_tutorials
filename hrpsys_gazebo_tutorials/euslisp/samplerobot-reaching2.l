@@ -1,4 +1,3 @@
-#!/usr/bin/env roseus
 (load "package://hrpsys_gazebo_tutorials/euslisp/samplerobot-interface-ex.l")
 (load "package://drc_task_common/euslisp/robot-util.l")
 
@@ -72,16 +71,20 @@
 
 (defun main
   ()
-  (reset-pose)
   (send *ri* :calibrate-inertia-sensor)
   (unix::sleep 5)
+  (reaching-pose)
   (send *ri* :start-auto-balancer)
   (send *ri* :start-st)
-  (test-reaching)
-  (walk-to-target)
+  (send *ri* :start-impedance :arms)
+  (send *ri* :go-pos 0.2 0 0)
+  (grasp)
+  (reaching-pose2)
+  (send *ri* :go-pos 0 0.3 0)
+  (send *ri* :go-pos 0 0.3 0)
+  (send *ri* :go-pos 0 0.4 0)
   (send *ri* :stop-st)
-  (unix::sleep 10)
-  (model2real)
+  (reaching-pose)
   )
 
 (defun reset
@@ -101,14 +104,15 @@
 
 (defun grasp-pose
   ()
-  (send *robot* :angle-vector #f(0.0 -20.0 0.0 47.0 -27.0 0.0 -45.6348 2.3642 2.96633 -71.0888 6.66406 26.6318 0.0 0.0 -20.0 0.0 47.0 -27.0 0.0 -45.8357 -4.39877 -6.35573 -73.172 -13.1492 27.942 0.0 0.0 0.0 0.0))
+  (send *robot* :angle-vector #f(0.0 -20.0 0.0 47.0 -27.0 0.0 30.0 10.0 -10.0 -100.0 9.0 -6.5 0.0 0.0 -20.0 0.0 47.0 -27.0 0.0 30.0 -10.0 10.0 -100.0 -9.0 -6.5 0.0 0.0 0.0 0.0))
   (model2real)
   )
 
 
 (defun reaching-pose
   ()
-  (send *robot* :angle-vector #f(0.0 -20.0 0.0 47.0 -27.0 0.0 -71.48 -1.58201 -42.0536 -60.0 15.6772 50.0 0.0 0.0 -20.0 0.0 47.0 -27.0 0.0 -71.48 1.58201 42.0536 -60.0 -15.6772 50.0 0.0 0.0 0.0 0.0))
+  (send *robot* :angle-vector #f(0.0 -20.0 0.0 47.0 -27.0 0.0 30.0 -50.0 -10.0 -100.0 9.0 -6.5 0.0 0.0 -20.0 0.0 47.0 -27.0 0.0 30.0 50.0 10.0 -100.0 -9.0 -6.5 0.0 0.0 0.0 0.0))
+  (model2real)
   )
 
 
@@ -126,3 +130,11 @@
 
 #f(0.0 -20.0 0.0 47.0 -27.0 0.0 30.0 -50.0 -10.0 -100.0 9.0 -6.5 0.0 0.0 -20.0 0.0 47.0 -27.0 0.0 30.0 50.0 10.0 -100.0 -9.0 -6.5 0.0 0.0 0.0 0.0)
 #f(0.0 -20.0 0.0 47.0 -27.0 0.0 30.0 -2.5 -10.0 -100.0 9.0 -6.5 0.0 0.0 -20.0 0.0 47.0 -27.0 0.0 30.0 2.5 10.0 -100.0 -9.0 -6.5 0.0 0.0 0.0 0.0)
+
+
+(defun reaching-pose2
+  ()
+  (send *robot* :angle-vector #f(0.0 -20.0 0.0 47.0 -27.0 0.0 12.6459 6.48292 -2.07462 -135.918 12.7801 47.7544 0.0 0.0 -20.0 0.0 47.0 -27.0 0.0 12.6459 -6.48292 2.07462 -135.918 -12.7801 47.7544 0.0 0.0 0.0 0.0))
+  (model2real)
+  )
+
